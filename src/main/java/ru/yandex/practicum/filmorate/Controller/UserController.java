@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.Exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -35,19 +35,10 @@ public class UserController {
 
     /**Cоздание пользователя.*/
     @PostMapping()
-    public User createUser(@RequestBody User user) throws UserValidationException {
+    public User createUser(@Valid @RequestBody User user) {
         if (users.containsKey(user.getId())){
             log.error("Такой пользователь уже существует!, {}", user);
             throw new UserValidationException("Такой пользователь уже существует!");
-        } else if (user.getEmail().trim().equals("") || !user.getEmail().contains("@")){
-            log.error("Электронная почта не может быть пустой и должна содержать символ - @, {}", user);
-            throw new UserValidationException("Электронная почта не может быть пустой и должна содержать символ - @");
-        } else if (user.getLogin().equals("") || user.getLogin().contains(" ")){
-            log.error("Логин не может быть пустым и содержать пробелы!, {}", user);
-            throw new UserValidationException("Логин не может быть пустым и содержать пробелы!");
-        } else if (user.getBirthday().isAfter(LocalDate.now())){
-            log.error("Дата рождения не может быть в будущем!, {}", user);
-            throw new UserValidationException("Дата рождения не может быть в будущем!");
         } else if (user.getName() == null){
             user.setName(user.getLogin());
             int idUser = generateId();
@@ -66,7 +57,7 @@ public class UserController {
 
     /**Обновление пользователя.*/
     @PutMapping()
-    public User updateUser(@RequestBody User user) throws UserValidationException {
+    public User updateUser(@Valid @RequestBody User user) {
         if (!users.containsKey(user.getId())){
             log.error("Такого пользователя не существует!, {}", user);
             throw new UserValidationException("Такого пользователя не существует!");
