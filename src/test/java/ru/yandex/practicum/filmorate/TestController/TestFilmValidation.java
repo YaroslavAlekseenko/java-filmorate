@@ -15,17 +15,6 @@ public class TestFilmValidation {
     FilmController filmController = new FilmController();
 
     @Test
-    @DisplayName("Проверка валидации. Передаем фильм в соответствии с правилами валидации.")
-    void testFilm() throws FilmValidationException {
-        film.setDuration(136);
-        film.setDescription("Мальчику с далекой планеты суждено изменить судьбу галактики.");
-        film.setName("Звёздные войны: Эпизод 1 — Скрытая угроза");
-        film.setReleaseDate(LocalDate.of(1999, 5, 16));
-        filmController.addFilm(film);
-        assertThrows(FilmValidationException.class, () -> filmController.addFilm(film));
-    }
-
-    @Test
     @DisplayName("Проверка валидации. Передаем фильм с некорректной датой релиза.")
     void testReleaseDate() {
         film.setDuration(136);

@@ -20,6 +20,7 @@ public class Film {
     private int id;
     @NotBlank(message = "название не может быть пустым")
     private String name;
+    @NotNull
     @Size(max = 200, message = "максимальная длина описания — 200 символов")
     private String description;
     @NotNull

@@ -22,6 +22,7 @@ public class User {
     @NotBlank(message = "логин не может быть пустым и содержать пробелы")
     @Pattern(regexp = "^\\S*", message = "логин не может быть пустым и содержать пробелы")
     private String login;
-    @Past(message = "дата рождения не может быть в будущем")
+    @NotNull
+    @PastOrPresent(message = "дата рождения не может быть в будущем")
     private LocalDate birthday;
 }
