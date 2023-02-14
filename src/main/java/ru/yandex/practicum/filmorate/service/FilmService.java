@@ -49,7 +49,7 @@ public class FilmService {
 
     /**Удаление лайка.*/
     public void deleteLikeFilm(Integer filmId, Integer userId) {
-        positiveUser(userId);
+        validateIsPositive(userId);
         inMemoryFilmStorage.getById(filmId).deleteLike(userId);
     }
 
@@ -68,7 +68,7 @@ public class FilmService {
     }
 
     /**Проверка id пользователя.*/
-    private void positiveUser(Integer userId) {
+    private void validateIsPositive(Integer userId) {
         if (userId < 1) {
             throw new StorageException("id пользователя должно быть положительным числом.");
         }
