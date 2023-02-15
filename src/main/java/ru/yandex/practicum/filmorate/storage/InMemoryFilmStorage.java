@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage {
+public class InMemoryFilmStorage implements Storage<Film> {
     private final Map<Integer, Film> films = new HashMap<>();
     private Integer idTask = 0;
 
