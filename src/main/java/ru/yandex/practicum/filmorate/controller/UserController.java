@@ -35,7 +35,7 @@ public class UserController {
     @GetMapping()
     public List<User> getAllUsers() {
         log.info("Получены все пользователи.");
-        return userService.getUsers();
+        return userService.getAll();
     }
 
     /**Cоздание пользователя.*/
@@ -43,30 +43,31 @@ public class UserController {
     public User addUser(@Valid @RequestBody User user) {
         checkUserName(user);
         log.info("Добавлен новый пользователь, {}", user);
-        return userService.addUser(user);
+        return userService.add(user);
     }
 
     /**Обновление пользователя.*/
     @PutMapping()
-    public User updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         checkUserName(user);
         log.info("Пользователь обновлен - , {}", user);
-        return userService.updateUser(user);
+        userService.update(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     /**Получение пользователя по id.*/
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         log.info("Получен пользователь c id = , {}", id);
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getById(id), HttpStatus.OK);
     }
 
     /**Добавление друзей.*/
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<User> putUserFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+    public ResponseEntity<Boolean> putUserFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("Добавлен в друзья пользователь c id = , {}", friendId);
         userService.addFriend(id, friendId);
-        return new ResponseEntity<>(userService.getUsers().get(id), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**Удаление друзей.*/
@@ -88,7 +89,7 @@ public class UserController {
     @GetMapping("/{id}/friends/common/{otherId}")
     public ResponseEntity<List<User>> getCommonUsersFriends(@PathVariable Integer id, @PathVariable Integer otherId) {
         log.info("Получены общие друзья с пользователем c id = , {}", otherId);
-        return new ResponseEntity<>(userService.getCommonFriends(id, otherId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getCommonFriend(id, otherId), HttpStatus.OK);
     }
 
     /**Проверка наличия имени пользователя.*/
