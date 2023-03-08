@@ -54,9 +54,7 @@ public class FilmDbStorage implements FilmDb {
     @Override
     public Optional<Film> findById(Integer id) {
         log.info("FilmDbStorage. findById id: {}", id);
-        String sqlQuery = "SELECT FILMS.FILM_ID, FILMS.FILM_NAME, FILMS.FILM_DESCRIPTION," +
-                "FILMS.FILM_RELEASE_DATE, FILMS.FILM_DURATION, FILMS.FILM_RATE, FILMS.FILM_RATE_AND_LIKES, " +
-                "FILMS.MPA_ID, MPA.MPA_NAME " +
+        String sqlQuery = "SELECT *" +
                 "                FROM FILMS JOIN MPA ON FILMS.MPA_ID = MPA.MPA_ID WHERE FILMS.FILM_ID = ? ";
         var result = jdbcTemplate.queryForObject(sqlQuery, this::mapRowToFilm, id);
         return Optional.of(result);
@@ -65,8 +63,7 @@ public class FilmDbStorage implements FilmDb {
     @Override
     public List<Film> findAll() {
         log.info("FilmDbStorage. findAll.");
-        String sqlQuery = "SELECT FILMS.FILM_ID,FILMS.FILM_NAME ,FILMS.MPA_ID ,FILMS.FILM_DESCRIPTION ,FILMS.FILM_RELEASE_DATE ,FILMS.FILM_DURATION , " +
-                "       FILMS.FILM_RATE,  FILMS.FILM_RATE_AND_LIKES, MPA.MPA_ID, MPA.MPA_NAME " +
+        String sqlQuery = "SELECT *" +
                 " FROM FILMS JOIN MPA ON FILMS.MPA_ID = MPA.MPA_ID ";
         return jdbcTemplate.query(sqlQuery, this::mapRowToFilm);
     }
