@@ -16,7 +16,9 @@ import java.util.*;
  *дата релиза — releaseDate;
  *продолжительность фильма — duration;
  *рейтинг фильма — rating;
- *список пользователей поставивших лайк — usersLikedFilm.
+ *Motion Picture Association, сокращённо МРА фильма — mpa;
+ *жанр фильма — genres;
+ *рейтинг фильма и лайки пользователей — rateAndLikes.
  */
 @Data
 public class Film {
@@ -29,31 +31,32 @@ public class Film {
     @NotNull
     private LocalDate releaseDate;
     @Positive(message = "продолжительность фильма должна быть положительной")
-    private int duration;
-    Integer rating;
-    Set<Integer> usersLikedFilm = new HashSet<>();
+    private Long duration;
+    private Integer rating;
+    private Mpa mpa;
+    private List<Genre> genres;
+    private Integer rateAndLikes;
 
-    public Film(String name, String description, LocalDate releaseDate, int duration, Integer rating) {
+    public Film(String name, String description, LocalDate releaseDate, Long duration, Integer rate, Mpa mpa,
+                List<Genre> genres) {
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        if (rating == null || rating < 0) {
-            this.rating = 0;
-        } else {
-            this.rating = rating;
-        }
+        this.rating = Objects.requireNonNullElse(rate, 0);
+        this.mpa = mpa;
+        this.genres = Objects.requireNonNullElseGet(genres, ArrayList::new);
     }
 
-    /**Добавление лайка.*/
-    public void addLike(Integer idUser) {
-        usersLikedFilm.add(idUser);
-        rating = rating + usersLikedFilm.size();
-    }
-
-    /**Удаление лайка.*/
-    public void deleteLike(Integer idUser) {
-        rating = rating - usersLikedFilm.size();
-        usersLikedFilm.remove(idUser);
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("FILM_NAME", name);
+        values.put("FILM_DESCRIPTION", description);
+        values.put("FILM_RELEASE_DATE", releaseDate);
+        values.put("FILM_DURATION", duration);
+        values.put("FILM_RATE", rating);
+        values.put("MPA_ID", mpa.getId());
+        values.put("FILM_RATE_AND_LIKES", rateAndLikes);
+        return values;
     }
 }
